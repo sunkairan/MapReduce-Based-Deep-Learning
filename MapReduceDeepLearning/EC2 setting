@@ -1,0 +1,18 @@
+sunkairan/mrdl.jar
+
+DeepLearningDriver 
+s3n://sunkairan/input/ 
+s3n://sunkairan/output/ 
+20
+3 784 1000 300
+2
+
+DeepLearningDriver 
+s3n://sunkairan/input_full/ 
+s3n://sunkairan/output_full/ 
+20
+5 784 1000 500 250 30
+5923
+
+bin/hadoop jar ~/workspace/MapReduceDeepLearning/mrdl.jar DeepLearningDriver "hdfs://localhost:9000/input" "hdfs://localhost:9000/output" 2 3 784 10 3 2
+
