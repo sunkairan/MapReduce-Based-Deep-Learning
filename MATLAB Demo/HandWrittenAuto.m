@@ -257,7 +257,22 @@ set(handles.axes_des,'YColor','white');
 set(handles.axes_des,'XTick',[]);
 set(handles.axes_des,'YTick',[]);
 
+function digit = recognize(img,w1,w2,w3,w_class)
+    img = double(255 - rgb2gray(img))/255;
+  data = reshape(img',1,28*28);
 
+  data = [data 1];
+  w1probs = 1./(1 + exp(-data*w1)); w1probs = [w1probs  1];
+  w2probs = 1./(1 + exp(-w1probs*w2)); w2probs = [w2probs 1];
+  w3probs = 1./(1 + exp(-w2probs*w3)); w3probs = [w3probs 1];
+  targetout = exp(w3probs*w_class);
+  targetout = targetout./repmat(sum(targetout),1,10);
+  maxdigit = max(targetout);
+  for i = (0:9)
+      if targetout(i+1)==maxdigit
+          digit = i;
+      end
+  end
   
 function  dataout = autodecode(w4probs, w5,w6,w7,w8)
 
@@ -268,5 +283,3 @@ function  dataout = autodecode(w4probs, w5,w6,w7,w8)
   dataout = 1 - 1./(1 + exp(-w7probs*w8));
   dataout = (reshape(dataout,[28,28]))';
 
-  
-  

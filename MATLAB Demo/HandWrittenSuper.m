@@ -194,7 +194,15 @@ function digit = recognize(img,w1,w2,w3,w_class)
       end
   end
 
+function  dataout = autodecode(w4probs, w5,w6,w7,w8)
 
+  w4probs = [w4probs  1];
+  w5probs = 1./(1 + exp(-w4probs*w5)); w5probs = [w5probs 1];
+  w6probs = 1./(1 + exp(-w5probs*w6)); w6probs = [w6probs 1];
+  w7probs = 1./(1 + exp(-w6probs*w7)); w7probs = [w7probs 1];
+  dataout = 1 - 1./(1 + exp(-w7probs*w8));
+  dataout = (reshape(dataout,[28,28]))';
+  
 % --- Executes on button press in pushbutton_clear.
 function pushbutton_clear_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton_clear (see GCBO)

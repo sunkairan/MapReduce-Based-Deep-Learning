@@ -200,7 +200,25 @@ public class RBMMapper extends MapReduceBase implements Mapper<LongWritable, Tex
         poshidstates = new Matrix(1,numhid);
     }     
     
-    
+   /*
+    public void sort(E[] array, int from, int len) {
+	     E tmp=null;
+	      for(int i=from+1;i<from+len;i++)
+	      {
+	          tmp=array[i];
+	          int j=i;
+	          for(;j>from;j--)
+	          {
+	              if(tmp.compareTo(array[j-1])<0)
+	              {
+	                  array[j]=array[j-1];
+	              }
+	              else break;
+	          }
+	          array[j]=tmp;
+	      }
+	  }*/
+	  
     private void getposphase()
     {
     	/*
@@ -283,6 +301,28 @@ public class RBMMapper extends MapReduceBase implements Mapper<LongWritable, Tex
         }
         negprods = negdata.transpose().times(neghidprobs);
         //(numdims * 1) *(1 * numhid) = (numdims * numhid)
+    }
+    
+        private void prop2nextLayer()
+    {
+    	/*
+    	 * It computes the forward propagation algorithm.
+    	 */
+        poshidprobs = data.times(vishid);
+        //(1 * numdims) * (numdims * numhid)
+        poshidprobs.plusEquals(hidbiases);
+        //data*vishid + hidbiases
+        double [] [] product_tmp2 = poshidprobs.getArray();
+        
+        for( int i2 = 0; i2 < numhid; i2++)
+        {
+        	/*
+        	 * compute the updated input, and write them to newinput
+        	 */
+		    product_tmp2[0][i2] = 1/(1 + Math.exp(-product_tmp2[0][i2]));
+		    newinput[i2] = (int) (product_tmp2[0][i2] * 255.0);
+        }
+            
     }
     
     //update the weights and biases
